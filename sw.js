@@ -1,11 +1,18 @@
-// var CACHE_NAME = 'cache-v1';
-// var fileToCache =[
-//     '/',
-//     '/js/app.js',
-//     '/css/base.css'
-// ];
+// 캐싱 스토리지에 저장될 파일이름
+var CACHE_NAME = 'pwa-offline-v1';
+// 캐싱할 웹 자원(이미지, css 등)의 목록
+var filesToCache =[
+    '/',
+    '/css/app.css'
+];
 
 // 서비스 워커 설치 (웹 자원 캐싱)
 self.addEventListener('install', (event) => {
-  
+  event.waitUntil(
+    caches.open(CACHE_NAME) // pwa 파일
+    .then((cache) => {
+      // pwa 파일에 다 집어 넣어라
+      return cache.addAll(filesToCache);
+    })
+  );
 });
