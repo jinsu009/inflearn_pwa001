@@ -2,6 +2,18 @@
 var CASH_NAME = "pwa-offline-v1"; // 캐싱스토리지에 저장될 이름
 var cash_file_list = [
   "/", // index.html에 대한 캐싱도 담당 하고 있다는 것을 의미
+  "/favicon.png",
+  "/css/app.css",
+  "/images/gauntlet.jpg",
+  "/images/hammer.png",
+  "/images/refresh.svg",
+  "/images/shield.png",
+]; // 캐싱할 웹 자원(css, img, ... )의 목록
+
+// activate 실습
+var CASH_NAME2 = "pwa-offline-v2"; // 캐싱스토리지에 저장될 이름
+var cash_file_list2 = [
+  "/", // index.html에 대한 캐싱도 담당 하고 있다는 것을 의미
   "/css/app.css",
 ]; // 캐싱할 웹 자원(css, img, ... )의 목록
 
@@ -24,6 +36,50 @@ self.addEventListener("install", function (event) {
       })
       .catch(function (err) {
         return console.log("caches open error ", err);
+      })
+  );
+});
+
+self.addEventListener("fetch", function (event) {
+  console.log("event.request  " + event.request);
+  event.respondWith(
+    // 화면에서 요청하는 request
+    caches
+      .match(event.request)
+      .then(function (resp) {
+        /**
+         * fetch : 응답값이 없을 경우 웹 리소스를 가져오는 네트워크 요청 발생
+         */
+        return resp || fetch(event.request);
+      })
+      .catch(function (err) {
+        return console.log("fetch error " + err);
+      })
+  );
+});
+
+/**
+ * 기존의 캐시를 지우고 새로운 캐시를 추가한다.
+ */
+self.addEventListener("activate", function (event) {
+  var newCacheList = [CASH_NAME2];
+  event.waitUntil(
+    caches
+      .keys()
+      .then(function (cache) {
+        /**
+         * 모든 값이 promise로 반환이 된 후 return 이 진행된다.
+         */
+        return Promise.all(
+          cache.map(function (ele) {
+            if (newCacheList.indexOf(ele) === -1) {
+              return caches.delete(ele);
+            }
+          })
+        );
+      })
+      .catch(function (err) {
+        return console.log("activate error " + err);
       })
   );
 });
