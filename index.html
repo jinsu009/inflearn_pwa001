@@ -30,19 +30,8 @@
         <img src="images/gauntlet.jpg" alt="Thanos Gauntlet" />
       </div>
     </main>
-
-    <script>
-      if ("serviceWorker" in navigator) {
-        // sw 등록
-        navigator.serviceWorker
-          .register("service-worker.js")
-          .then(function (reg) {
-            console.log("sw 등록 완료 " + reg);
-          })
-          .catch(function (err) {
-            console.log("sw 등록 실패 " + err);
-          });
-      }
-    </script>
+    <!--webpack 사용시 build 파일의 경로를 적어줘야 한다. -->
+    <!-- <script src="./js/app.js"></script>  __ 잘못됨-->
+    <script src="./dist/bundles.js"></script>
   </body>
 </html>
