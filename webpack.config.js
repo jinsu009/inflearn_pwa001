@@ -14,7 +14,7 @@ module.exports = {
     publicPath: "/dist/",
   },
 
-  plugin: [
+  plugins: [
     new SWPrecacheWebpackPlugin({
       cacheId: "pwa-offline-v4",
       filename: "service-worker.js",
